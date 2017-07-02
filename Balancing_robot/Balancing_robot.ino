@@ -45,7 +45,7 @@ float pid_output_left, pid_output_right;
 //Setup basic functions
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup(){
-  Serial.begin(9600);                                                       //Start the serial port at 9600 kbps
+  Serial.begin(57600);                                                       //Start the serial port at 9600 kbps
   Wire.begin();                                                             //Start the I2C bus as master
   TWBR = 12;                                                                //Set the I2C clock speed to 400kHz
 
@@ -214,17 +214,17 @@ void loop(){
   }
 
   if(received_byte & B00000100){                                            //If the third bit of the receive byte is set change the left and right variable to turn the robot to the right
-    if(pid_setpoint > -2.5)pid_setpoint -= 0.05;                            //Slowly change the setpoint angle so the robot starts leaning forewards
-    if(pid_output > max_target_speed * -1)pid_setpoint -= 0.005;            //Slowly change the setpoint angle so the robot starts leaning forewards
+    if(pid_setpoint > -2.5)pid_setpoint -= 0.10;                            //Slowly change the setpoint angle so the robot starts leaning forewards
+    if(pid_output > max_target_speed * -1)pid_setpoint -= 0.010;            //Slowly change the setpoint angle so the robot starts leaning forewards
   }
   if(received_byte & B00001000){                                            //If the forth bit of the receive byte is set change the left and right variable to turn the robot to the right
-    if(pid_setpoint < 2.5)pid_setpoint += 0.05;                             //Slowly change the setpoint angle so the robot starts leaning backwards
-    if(pid_output < max_target_speed)pid_setpoint += 0.005;                 //Slowly change the setpoint angle so the robot starts leaning backwards
+    if(pid_setpoint < 2.5)pid_setpoint += 0.10;                             //Slowly change the setpoint angle so the robot starts leaning backwards
+    if(pid_output < max_target_speed)pid_setpoint += 0.010;                 //Slowly change the setpoint angle so the robot starts leaning backwards
   }   
 
   if(!(received_byte & B00001100)){                                         //Slowly reduce the setpoint to zero if no foreward or backward command is given
-    if(pid_setpoint > 0.5)pid_setpoint -=0.05;                              //If the PID setpoint is larger then 0.5 reduce the setpoint with 0.05 every loop
-    else if(pid_setpoint < -0.5)pid_setpoint +=0.05;                        //If the PID setpoint is smaller then -0.5 increase the setpoint with 0.05 every loop
+    if(pid_setpoint > 0.5)pid_setpoint -=0.10;                              //If the PID setpoint is larger then 0.5 reduce the setpoint with 0.05 every loop
+    else if(pid_setpoint < -0.5)pid_setpoint +=0.10;                        //If the PID setpoint is smaller then -0.5 increase the setpoint with 0.05 every loop
     else pid_setpoint = 0;                                                  //If the PID setpoint is smaller then 0.5 or larger then -0.5 set the setpoint to 0
   }
   
